@@ -1,1 +1,5 @@
 intro.txt
+docker_rstudio.txt
+reference_envir.txt
+continuous_analysis.txt
+docker_python.txt
