@@ -1,0 +1,34 @@
+# Introduction
+
+Reproducibility of scientific experiments is vital in assessing the validity of the results.
+A recent study [^1] shows that the results of differential gene expression analysis
+on microarray data with custom chips can change as different versions of chip annotation become available, making such studies
+not reproducible. Many leading journals now require the authors to demonstrate reproducibility of the study results
+by sharing the data and source code underlying the experiment. Even when the data and source
+code are provided the readers may fail to reproduce the results because of differences in
+operating systems, computing environments and software/library dependencies. Recently, workflows
+have been developed that utilise the existing technologies to create stable, easy to share 
+computing environments or "digital archives" that would run all the analysis on a environment
+similar to the one used by the authors at the time of generating the results. Examples
+of such digital archives include "Reference Environments" proposed by Hurley et al. (2014)[^2],
+and "Continuous Analysis" workflows proposed by Beaulieu-Jones et al. (2016).
+
+This book presents a collection of tools and workflows that have been developed to reproduce 
+results of scientific studies. There will be a focus on developing digital archives for 
+the analysis done in R statistical programming language, however workflows can easily be adapted
+to be used with other programming languages.
+
+## About the cover
+
+
+
+
+[^1]:
+Reproducible Computational Workflows with Continuous Analysis
+Brett K Beaulieu-Jones, Casey S Greene
+bioRxiv 056473; doi: http://dx.doi.org/10.1101/056473
+
+[^2]:
+ Hurley, D. G., Budden, D. M., & Crampin, E. J. (2014).
+ Virtual Reference Environments: a simple way to make research reproducible.
+ *Briefings in Bioinformatics*, bbu043. doi:10.1093/bib/bbu043
