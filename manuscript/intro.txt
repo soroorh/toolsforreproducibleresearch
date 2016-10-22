@@ -18,7 +18,7 @@ results of scientific studies. There will be a focus on developing digital archi
 the analysis done in R statistical programming language, however workflows can easily be adapted
 to be used with other programming languages.
 
-## About the cover
+### About the cover
 
 The cover of the book is a photo of "Shazdeh Garden" gateway, the ninth Iranian garden 
 registered on the UNESCO’s World Heritage List in Kerman province, Iran. What is peculiar 
