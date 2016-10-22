@@ -8,7 +8,7 @@ by sharing the data and source code underlying the experiment. Even when the dat
 code are provided the readers may fail to reproduce the results because of differences in
 operating systems, computing environments and software/library dependencies. Recently, workflows
 have been developed that utilise the existing technologies to create stable, easy to share 
-computing environments or "digital archives" that would run all the analysis on a environment
+computing environments or "digital archives" that would run all the analysis on an environment
 similar to the one used by the authors at the time of generating the results. Examples
 of such digital archives include "Reference Environments" proposed by Hurley et al. (2014)[^2],
 and "Continuous Analysis" workflows proposed by Beaulieu-Jones et al. (2016).
@@ -19,6 +19,26 @@ the analysis done in R statistical programming language, however workflows can e
 to be used with other programming languages.
 
 ## About the cover
+
+The cover of the book is a photo of "Shazdeh Garden" gateway, the ninth Iranian garden 
+registered on the UNESCO’s World Heritage List in Kerman province, Iran. What is peculiar 
+about this garden is that it is located in a desert. The water resource for Shazdeh Garden 
+is streams originating from adjacent mountains. The garden is a perfect example of resource
+management. When I reflect on my research career since my undergraduate studies, I see myself
+as that bare and dry land, that owes its thrive and prosper to her supervisor's trust and support.
+Melissa Davis believed my potentials and capabilities and gave me the chance to discover them. 
+"Shazde Garden" is, therefore, a nice metaphor for the prosperity of one's potentials that 
+could be achieved by belief and support of their supervisors. I hope we see more such inspiring
+supervisors in the research community.
+
+Soroor Hediyeh-Zadeh
+
+
+
+
+
+
+![alt text](https://github.com/soroorh/toolsforreproducibleresearch/images/intro.png)
 
 
 
