@@ -31,10 +31,7 @@ Melissa Davis believed my potentials and capabilities and gave me the chance to 
 could be achieved by belief and support of their supervisors. I hope we see more such inspiring
 supervisors in the research community.
 
-Soroor Hediyeh-Zadeh
-
-
-![shazdeh garden](toolsforreproducibleresearch/manuscript/intro.png)
+Soroor Hediyeh-Zadeh ![shazdeh garden](toolsforreproducibleresearch/manuscript/intro.png)
 
 
 
