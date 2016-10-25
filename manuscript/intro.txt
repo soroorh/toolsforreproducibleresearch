@@ -1,4 +1,4 @@
-# Introduction
+# Preface
 
 Reproducibility of scientific experiments is vital in assessing the validity of the results.
 A recent study [^1] shows that the results of differential gene expression analysis
@@ -38,17 +38,15 @@ Soroor Hediyeh-Zadeh
 
 
 
-![alt text](https://github.com/soroorh/toolsforreproducibleresearch/images/intro.png)
+![shazdeh garden](./intro.png)
 
 
 
 
-[^1]:
-Reproducible Computational Workflows with Continuous Analysis
+[^1]: Reproducible Computational Workflows with Continuous Analysis
 Brett K Beaulieu-Jones, Casey S Greene
 bioRxiv 056473; doi: http://dx.doi.org/10.1101/056473
 
-[^2]:
- Hurley, D. G., Budden, D. M., & Crampin, E. J. (2014).
+[^2]: Hurley, D. G., Budden, D. M., & Crampin, E. J. (2014).
  Virtual Reference Environments: a simple way to make research reproducible.
  *Briefings in Bioinformatics*, bbu043. doi:10.1093/bib/bbu043
