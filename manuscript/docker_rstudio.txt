@@ -2,7 +2,7 @@
 
 # Reproducible Research with Docker
 
-Docker is a minimal virtual machine, and a virtual machine is a lightweight computing environment 
+Docker[^1] is a minimal virtual machine. A virtual machine is a lightweight computing environment 
 on which one can install and run software without needing to install the software on user's machine/ 
 OS system. For example, you can program a Docker container to run R version 3.0, whereas you might 
 have R version 3.2.0 installed on your own computer. In other words, with Docker you can run multiple
@@ -19,8 +19,13 @@ by writing Dockerfiles. A Dockerfile is a simple text file (without any suffix) 
 Docker-specific instructions. Like any other technologies Docker has it's own markup language, but generally
 the language is very similar to unix command-lines. I'll first start by a minimal tutorial on Docker markup language.
 
+[^1]: https://docs.docker.com/
+
 ## Minimal Docker markup language tutorial
 
 ## Writing Dockerfiles
 
 ## Docker commands cheatsheet 
+
+
+
