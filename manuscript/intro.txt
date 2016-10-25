@@ -34,19 +34,11 @@ supervisors in the research community.
 Soroor Hediyeh-Zadeh
 
 
+![shazdeh garden](https://github.com/soroorh/toolsforreproducibleresearch/blob/master/manuscript/intro.png)
 
 
 
 
-![shazdeh garden](./intro.png)
+[^1]: Reproducible Computational Workflows with Continuous Analysis. Brett K Beaulieu-Jones, Casey S Greene. bioRxiv 056473; doi: http://dx.doi.org/10.1101/056473
 
-
-
-
-[^1]: Reproducible Computational Workflows with Continuous Analysis
-Brett K Beaulieu-Jones, Casey S Greene
-bioRxiv 056473; doi: http://dx.doi.org/10.1101/056473
-
-[^2]: Hurley, D. G., Budden, D. M., & Crampin, E. J. (2014).
- Virtual Reference Environments: a simple way to make research reproducible.
- *Briefings in Bioinformatics*, bbu043. doi:10.1093/bib/bbu043
+[^2]: Hurley, D. G., Budden, D. M., & Crampin, E. J. (2014). Virtual Reference Environments: a simple way to make research reproducible. *Briefings in Bioinformatics*, bbu043. doi:10.1093/bib/bbu043
