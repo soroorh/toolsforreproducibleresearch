@@ -1,0 +1,26 @@
+{mainmatter}
+
+# Reproducible Research with Docker
+
+Docker is a minimal virtual machine, and a virtual machine is a lightweight computing environment 
+on which one can install and run software without needing to install the software on user's machine/ 
+OS system. For example, you can program a Docker container to run R version 3.0, whereas you might 
+have R version 3.2.0 installed on your own computer. In other words, with Docker you can run multiple
+computing environments on one machine in parallel without disrupting the functionality 
+of one or the other. In the context of research reproducibility, the data, source codes and any dependencies 
+are programmed into containers. Docker connects these containers to produce the final computing environment, 
+or the Docker image. Docker images can be very large in size. However, they can be easily run and shared.
+For this reason, Docker is becoming a popular technology for software development.
+
+In this section I'll provide complete instructions to create a Docker image that initiates an instance of
+R-Studio Server. The data and source codes will be mounted on this instance of R-Studio Server by 
+programming Docker, therefore, enabling to reproduce the results. Programming of Docker containers is done
+by writing Dockerfiles. A Dockerfile is a simple text file (without any suffix) that contains a set of 
+Docker-specific instructions. Like any other technologies Docker has it's own markup language, but generally
+the language is very similar to unix command-lines. I'll first start by a minimal tutorial on Docker markup language.
+
+## Minimal Docker markup language tutorial
+
+## Writing Dockerfiles
+
+## Docker commands cheatsheet 
