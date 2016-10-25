@@ -1,3 +1,4 @@
+{frontmatter}
 # Preface
 
 Reproducibility of scientific experiments is vital in assessing the validity of the results.
@@ -35,7 +36,7 @@ Soroor Hediyeh-Zadeh
 
 
 ![shazdeh garden]
-(https://github.com/soroorh/toolsforreproducibleresearch/manuscript/intro.png)
+(images/intro.png)
 
 
 
