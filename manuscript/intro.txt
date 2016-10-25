@@ -1,4 +1,5 @@
 {frontmatter}
+
 # Preface
 
 Reproducibility of scientific experiments is vital in assessing the validity of the results.
@@ -35,8 +36,7 @@ supervisors in the research community.
 Soroor Hediyeh-Zadeh 
 
 
-![shazdeh garden]
-(images/intro.png)
+![shazdeh garden](images/intro.png)
 
 
 
