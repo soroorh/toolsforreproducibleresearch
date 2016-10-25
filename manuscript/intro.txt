@@ -34,7 +34,7 @@ supervisors in the research community.
 Soroor Hediyeh-Zadeh
 
 
-![shazdeh garden](https://github.com/soroorh/toolsforreproducibleresearch/blob/master/manuscript/intro.png)
+![shazdeh garden](toolsforreproducibleresearch/manuscript/intro.png)
 
 
 
