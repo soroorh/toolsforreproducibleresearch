@@ -55,7 +55,7 @@ CMD ["Rscript", "myscript.R"]
 
 In the above example, the latest version of `base-r` image is imported. `COPY` makes a copy of the contents of the
 current directory to the `/usr/local/src/myscripts` directory on Docker. `WORKDIR` changes the directory to `myscripts`
-and `CMD` runs `myscript.R` using the command-line program `Rscripts`. There are a couple more Docker instructions that you
+and `CMD` runs `myscript.R` using the command-line executable `Rscripts`. There are a couple more Docker instructions that you
 will see in this chapter: `EXPOSE` and `MAINTAINER`. The `EXPOSE` instruction informs Docker that the container listens 
 on the specified network ports at runtime. The `MAINTAINER` instruction tells who has made the image. For more details
 on Docker instructions see [Best practices for writing Dockerfiles](https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/)
