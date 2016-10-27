@@ -3,7 +3,7 @@
 # Reproducible Research with Docker
 
 Docker[^1] is a minimal virtual machine. A virtual machine is a lightweight computing environment 
-on which one can install and run software without needing to install the software on user's machine/ 
+on which one can install and run software without installation of the software on user's machine/ 
 OS system. For example, you can program a Docker container to run R version 3.0, whereas you might 
 have R version 3.2.0 installed on your own computer. In other words, with Docker you can run multiple
 computing environments on one machine in parallel without disrupting the functionality 
@@ -15,13 +15,56 @@ For this reason, Docker is becoming a popular technology for software developmen
 In this section I'll provide complete instructions to create a Docker image that initiates an instance of
 R-Studio Server. The data and source codes will be mounted on this instance of R-Studio Server by 
 programming Docker, therefore, enabling to reproduce the results. Programming of Docker containers is done
-by writing Dockerfiles. A Dockerfile is a simple text file (without any suffix) that contains a set of 
+by writing `Dockerfile`s. A `Dockerfile` is a simple text file (without any suffix) that contains a set of 
 Docker-specific instructions. Like any other technologies Docker has it's own markup language, but generally
 the language is very similar to unix command-lines. I'll first start by a minimal tutorial on Docker markup language.
 
 [^1]: https://docs.docker.com/
 
 ## Minimal Docker markup language tutorial
+
+A `Dockerfile` contains a set of instructions that tell Docker what needs to be done. The instructions
+are by followed by Unix commands. Similar to a computer which
+requires an operation system to work, Docker would need a OS to be installed on it. 
+For example:
+
+~~~~~~~~
+$ cat Dockerfile
+
+
+FROM ubuntu:14.04
+RUN mkdir scripts
+WORKDIR /scripts
+~~~~~~~~
+
+The `FROM` instruction tells docker to import Ubuntu image version 14.04 from ubuntu repository on DockerHub [^1].
+This, in fact, installs Ubuntu on our Docker image. The `RUN` instruction tells Docker that the following command is a 
+unix command and should be treated accordingly. So Docker runs `mkdir scripts` on Ubuntu and creates the `scripts/` directory.
+The `WORKDIR` instruction is similar `cd` in unix, and changes the current working directory to the `scripts/` directory that was
+just created in the previous step. 
+
+Docker instructions `ADD` or `COPY` can be used to add or copy a file from your local directory to the Docker container.
+`CMD` will run the program/executable specified by the following command. 
+
+~~~~~~~~
+FROM r-base
+COPY . /usr/local/src/myscripts
+WORKDIR /usr/local/src/myscripts
+CMD ["Rscript", "myscript.R"]
+~~~~~~~~ 
+
+In the above example, the latest version of `base-r` image is imported. `COPY` makes a copy of the contents of the
+current directory to the `/usr/local/src/myscripts` directory on Docker. `WORKDIR` changes the directory to `myscripts`
+and `CMD` runs `myscript.R` using the command-line program `Rscripts`. There are a couple more Docker instructions that you
+will see in this chapter: `EXPOSE` and `MAINTAINER`. The `EXPOSE` instruction informs Docker that the container listens 
+on the specified network ports at runtime. The `MAINTAINER` instruction tells who has made the image. For more details
+on Docker instructions see [Best practices for writing Dockerfiles](https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/)
+
+
+
+[^1]: DockerHub is a repository for Docker images. Anyone interested in publishing their Dockerfile publicly, would push their image to this repository.
+
+[^bestPractices]: https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/
 
 ## Writing Dockerfiles
 
