@@ -28,14 +28,14 @@ are by followed by Unix commands. Similar to a computer which
 requires an operation system to work, Docker would need a OS to be installed on it. 
 For example:
 
-~~~~~~~~
+```
 $ cat Dockerfile
 
 
 FROM ubuntu:14.04
 RUN mkdir scripts
 WORKDIR /scripts
-~~~~~~~~
+```
 
 The `FROM` instruction tells docker to import Ubuntu image version 14.04 from ubuntu repository on DockerHub [^dockerHub].
 This, in fact, installs Ubuntu on our Docker image. The `RUN` instruction tells Docker that the following command is a 
