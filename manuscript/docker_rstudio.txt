@@ -17,11 +17,12 @@ R-Studio Server. The data and source codes will be mounted on this instance of R
 programming Docker, therefore, enabling to reproduce the results. Programming of Docker containers is done
 by writing `Dockerfile`s. A `Dockerfile` is a simple text file (without any suffix) that contains a set of 
 Docker-specific instructions. Like any other technologies Docker has it's own markup language, but generally
-the language is very similar to unix command-lines. I'll first start by a minimal tutorial on Docker markup language.
+the language is very similar to unix command-lines. Please note that basic knowledge of unix command lines is
+essential in building Docker images. I'll first start by a minimal tutorial on Docker markup language.
 
 [^docker]: https://docs.docker.com/
 
-## Minimal Docker markup language tutorial
+## Minimal Docker tutorial
 
 A `Dockerfile` contains a set of instructions that tell Docker what needs to be done. The instructions
 are by followed by Unix commands. Similar to a computer which
@@ -67,6 +68,73 @@ on Docker instructions see [Best practices for writing Dockerfiles](https://docs
 [^bestPractices]: https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/
 
 ## Writing Dockerfiles
+
+As discussed, Docker provides a null computing environment that can be programmed and customised through Docker instructions.
+Therefore, in order to make Docker run a R-Studio session, we would need to have an OS such as Ubuntu installed to have a programmable environment.
+We can then install R, R-Studio Server and any other dependencies. We can also install executables such as Git or wget, if we are going to download from a link or clone the data
+from a version control repository, such as GitHub. In addition, we can setup user accounts and tell Docker to listen for network ports at the runtime. 
+A Dockerfile containing such instructions would be the "base image" to our main Docker image which runs the actual analysis. To build the main
+Docker image, we would need another Dockerfile. This Dockerfile would import the base image (i.e. an Ubuntu machine with R and R-Studio Server etc.
+installed), download the data and source codes and run the analysis. 
+
+Writing such Dockerfiles from scratch could be time consuming. I am, therefore, going to go over the principals by providing some templates
+that have already been developed for this purpose. The template Dockerfiles are available on [GitHub](https://github.com/soroorh/toolsforreproducibleresearch)
+
+### The Base Image 
+
+The following is a template for the base Dockerfile that we would need to use to build the base image.
+
+```
+FROM ubuntu:14.04
+MAINTAINER Soroor Hediyeh Zadeh <hediyehzadeh.s@wehi.edu.au>
+RUN echo "deb http://cran.ms.unimelb.edu.au/bin/linux/ubuntu trusty/" >> /etc/apt/sources.list   
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9 
+RUN apt-get update
+RUN apt-get install -y software-properties-common libxml2-dev
+RUN add-apt-repository ppa:marutter/rdev
+RUN apt-get update  
+RUN apt-get upgrade -y
+RUN apt-get install -y -q r-base r-base-dev gdebi-core libapparmor1 supervisor wget git
+RUN (wget https://download2.rstudio.org/rstudio-server-0.99.902-amd64.deb && gdebi -n rstudio-server-0.99.902-amd64.deb)
+RUN rm /rstudio-server-0.99.902-amd64.deb
+RUN (adduser --disabled-password --gecos "" user && echo "user:user"|chpasswd)
+RUN mkdir -p /var/log/supervisor
+ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+EXPOSE 8787
+CMD ["/usr/bin/supervisord"]
+
+```
+Here, the `FROM` instruction in line 1 imports Ubuntu version 14.04 image from ubuntu repository (in DockerHub). This
+installs Ubuntu on our null computing environment.
+The `MAINTAINER` instruction specifies the name of the author(s) of the image. In line 3  the `RUN` instruction is used to run
+a command. This command adds the path to download the latest version of R from a particular CRAN minor repository to the relevant search path in ubuntu.
+This ensures that at each build run the latest R version - that was used by the authors at the time of the study- is installed. 
+Note that the R version will be identical to the one used in the original study, and will not change with running the image.
+However, if the image is re-built, then the instruction tells Docker to check for the latest version in the specified CRAN minor and
+install the latest version. The path can be replaced with the path to your desired CRAN minor repository.
+
+lines 4-9 install required dependencies to install R on a ubuntu machine. `apt-get` is a unix command for installing software. Line 10 
+is a nice example of how required programs can be installed. Here, line 10 is instructing Docker to install programs such as
+base R, R-Devel (development version of R), gdebi-core (required for installing R-Studio Server), wget ( download from a link),
+git (for version control) and supervisor (for setting up users accounts). Line 11 downloads and installs R-Studio Server 
+version 0.99.902 for 64bit. As new versions of R become available, new R-Studio Server versions become available, too. So,
+make sure you replace the R-Studio download link with the latest link (visit RStudio website for more information),
+if you're using the template. Once the R-Studio Server is installed, the source download file is not required any more, and can 
+be removed (line 12). The `RUN` instruction in Line 13 instructs Docker to set up a user account , named "user", and sets a password
+for this account (user:user). Docker then creates a directory called `supervisor/` under `/var/log` directory in ubuntu, using `mkdir` command
+for creating directories. The `ADD` instruction in line 15 is used to add the `supervisord.conf` script from the current local directory
+to the directory that was just created. This executable is available with the template on GitHub repository. Line 18 uses `EXPOSE` instruction
+to tell the docker to listen for 8787 port on the network to be called at the runtime. This is the port that initiates an instance of 
+R-Studio Server. Once the image is run from the command-line/terminal, Docker would wait for the user to call this port from the browser.
+It would then run the image. In the final line, the executable `supervisor` is run, which is responsible to create a login page.
+
+### The Main Image
+
+#### Data Organisation
+
+Ideally, data should be organised in a meaningful and structured manner. For example, there should be a `/data` directory that is home
+to the all data used in the experiment. The source codes go under the `/scripts` directory, and the results can be stored in the`/output/
+directory. Having data organised this way, it would be easier to locate the files
 
 ## Docker commands cheatsheet 
 
