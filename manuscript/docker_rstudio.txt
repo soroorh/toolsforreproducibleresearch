@@ -302,9 +302,50 @@ from the main Dockerfile, the `FROM` instruction imports the base image. The bas
     Dockerfile
 6. Upon entering http://0.0.0.0:49000 in the browser, it opens up RStudio Server.
 
-## Docker commands cheatsheet 
+## Docker commands cheatsheet
 
-Cheatsheet and troubleshooting 
+In this section, I will introduce some of commonly used Docker commands.
 
+To list all Docker images on your machine enter (in terminal/command-line):
 
+```
+docker images
 
+```
+
+To see all running images enter:
+
+```
+docker ps
+
+```
+
+To remove a docker container enter:
+
+```
+docker rm your-dockerHub-repo/image-repo
+
+```
+
+Note that sometimes you get an error that a container can't be removed, because it is running. In that case you would need to
+stop the container first.
+
+```
+docker stop your-dockerHub-repo/image-repo
+
+```
+
+Sometimes when you attempt to run an image using `docker run`, you get an error that the connection can't be made because
+the port is already allocated. This happens as results of a running container/image running at the same port with which you having
+been trying to connect. In such cases you would need to stop all running processes to make the port available using the following command
+
+```
+docker stop $(docker ps -aq)
+
+```
+
+Also note that when you attempt to run an image through `docker run` command, Docker looks for the image on your machine. 
+If it can't find an image with that name, then it tries to push the latest version of the image from the (DockerHub) repository. 
+However, if a new version of an image is made available and you have already a version of that image on your machine, Docker would run
+the existing version of the image. If you wish to get the new version, you would need to remove the existing image with `docker rmi image-name`,
+and the run the `docker run` command.
