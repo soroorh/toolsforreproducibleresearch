@@ -13,7 +13,7 @@ or the Docker image. Docker images can be very large in size. However, they can 
 For this reason, Docker is becoming a popular technology for software development.
 
 In this section I'll provide complete instructions to create a Docker image that initiates an instance of
-R-Studio Server. The data and source codes will be mounted on this instance of R-Studio Server by 
+RStudio Server. The data and source codes will be mounted on this instance of RStudio Server by 
 programming Docker, therefore, enabling to reproduce the results. Programming of Docker containers is done
 by writing `Dockerfile`s. A `Dockerfile` is a simple text file (without any suffix) that contains a set of 
 Docker-specific instructions. Like any other technologies Docker has it's own markup language, but generally
@@ -63,18 +63,18 @@ on Docker instructions see [Best practices for writing Dockerfiles](https://docs
 
 
 
-[^dockerHub]: DockerHub is a repository for Docker images. Anyone interested in publishing their Dockerfile publicly, would push their image to this repository.
+[^dockerHub]: DockerHub is a repository for sharing Docker images. See https://hub.docker.com
 
 [^bestPractices]: https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/
 
 ## Writing Dockerfiles
 
 As discussed, Docker provides a null computing environment that can be programmed and customised through Docker instructions.
-Therefore, in order to make Docker run a R-Studio session, we would need to have an OS such as Ubuntu installed to have a programmable environment.
-We can then install R, R-Studio Server and any other dependencies. We can also install executables such as Git or wget, if we are going to download from a link or clone the data
+Therefore, in order to make Docker run a RStudio session, we would need to have an OS such as Ubuntu installed to have a programmable environment.
+We can then install R, RStudio Server and any other dependencies. We can also install executables such as Git or wget, if we are going to download from a link or clone the data
 from a version control repository, such as GitHub. In addition, we can setup user accounts and tell Docker to listen for network ports at the runtime. 
 A Dockerfile containing such instructions would be the "base image" to our main Docker image which runs the actual analysis. To build the main
-Docker image, we would need another Dockerfile. This Dockerfile would import the base image (i.e. an Ubuntu machine with R and R-Studio Server etc.
+Docker image, we would need another Dockerfile. This Dockerfile would import the base image (i.e. an Ubuntu machine with R and RStudio Server etc.
 installed), download the data and source codes and run the analysis. 
 
 Writing such Dockerfiles from scratch could be time consuming. I am, therefore, going to go over the principals by providing some templates
@@ -114,17 +114,17 @@ install the latest version. The path can be replaced with the path to your desir
 
 lines 4-9 install required dependencies to install R on a ubuntu machine. `apt-get` is a unix command for installing software. Line 10 
 is a nice example of how required programs can be installed. Here, line 10 is instructing Docker to install programs such as
-base R, R-Devel (development version of R), gdebi-core (required for installing R-Studio Server), wget ( download from a link),
-git (for version control) and supervisor (for setting up users accounts). Line 11 downloads and installs R-Studio Server 
-version 0.99.902 for 64bit. As new versions of R become available, new R-Studio Server versions become available, too. So,
-make sure you replace the R-Studio download link with the latest link (visit RStudio website for more information),
-if you're using the template. Once the R-Studio Server is installed, the source download file is not required any more, and can 
+base R, R-Devel (development version of R), gdebi-core (required for installing RStudio Server), wget ( download from a link),
+git (for version control) and supervisor (for setting up users accounts). Line 11 downloads and installs RStudio Server 
+version 0.99.902 for 64bit. As new versions of R become available, new RStudio Server versions become available, too. So,
+make sure you replace the RStudio download link with the latest link (visit RStudio website for more information),
+if you're using the template. Once the RStudio Server is installed, the source download file is not required any more, and can 
 be removed (line 12). The `RUN` instruction in Line 13 instructs Docker to set up a user account , named "user", and sets a password
 for this account (user:user). Docker then creates a directory called `supervisor/` under `/var/log` directory in ubuntu, using `mkdir` command
 for creating directories. The `ADD` instruction in line 15 is used to add the `supervisord.conf` script from the current local directory
 to the directory that was just created. This executable is available with the template on GitHub repository. Line 18 uses `EXPOSE` instruction
-to tell the docker to listen for 8787 port on the network to be called at the runtime. This is the port that initiates an instance of 
-R-Studio Server. Once the image is run from the command-line/terminal, Docker would wait for the user to call this port from the browser.
+to tell the docker to listen for a port on the network to be called at the runtime. This is the port that initiates an instance of 
+RStudio Server. Once the image is run from the command-line/terminal, Docker would wait for the user to call this port from the browser.
 It would then run the image. In the final line, the executable `supervisor` is run, which is responsible to create a login page.
 
 ![login page](images/rstudio-login)
@@ -136,12 +136,12 @@ It would then run the image. In the final line, the executable `supervisor` is r
 Ideally, files related to a project should be organised in a meaningful and structured manner. For example, there should be a `/data` directory that is home
 to all the data used in the experiment in the project directory. The source codes go under the `/scripts` directory, and the results are stored in the`/output`
 directory. Having data organised this way, locating files becomes easier and ensures consistency. Since all project-related files are 
-going to be made available through a R-Studio session, I recommend you organise your files as described here, so that your readers would know
+going to be made available through a RStudio session, I recommend you organise your files as described here, so that your readers would know
 where to look to find codes, datasets and the expected outputs. You would then need to push your project directory to a version control repository
-such as Github, BitBucket or SVN. Below is an illustration of how we would like project files to appear in the R-Studio Server session that Docker 
+such as Github, BitBucket or SVN. Below is an illustration of how we would like project files to appear in the RStudio Server session that Docker 
 is going to launch.
 
-![Data Organisation in Docker-based R-Studio session](images/rstudio-session)
+![Data Organisation in Docker-based RStudio session](images/rstudio-session)
 
 
 
@@ -172,10 +172,10 @@ RUN ln -s /sample_project_repo/output /home/user/output    # change 'user' here 
 RUN ln -s /sample_project_repo/scripts /home/user/scripts
 RUN ln -s /sample_project_repo/data /home/user/data
 ```
-Below is an illustration of how we would like project files to appear in the R-Studio Server session that Docker 
+Below is an illustration of how we would like project files to appear in the RStudio Server session that Docker 
 is going to launch.
 
-![Data Organisation in Docker-based R-Studio session](images/rstudio-session)
+![Data Organisation in Docker-based RStudio session](images/rstudio-session)
 
 The next step is to enbale write permissions to the `/output` directory, and any other (sub)directory to which you wish
 to write files. This enables saving the main and/or supplementary results, as well as the intermediate data. The `RUN` instruction
@@ -216,7 +216,7 @@ RUN (Rscript -e 'source("http://bioconductor.org/biocLite.R"); biocLite(c("limma
 ```
 
 A nice way of running the analysis would be to write a general script called 'generate_all_experiments.R' that would go over
-all the scripts in the study. This script can be sourced by the reader once the R-Studio session has started, to re-generate
+all the scripts in the study. This script can be sourced by the reader once the RStudio session has started, to re-generate
 all the results in the experiment.
 
 ```
@@ -239,17 +239,76 @@ Note that all your scripts should be run from within the `/scripts` directory, a
 directory relative to the `/scripts` directory. Similarly, the path to the data should be relative to the `/scripts` directory
 So, be careful when setting paths in your scripts. In fact, the reason why I change the working directory to the cloned repository is
 that the path in all my scripts is relative to the `/scripts` directory (i.e. it is assumed that the current working directory is the
-`/scripts` directory). Also note that 'generate_all_experiments.R' is in the  with the same git repository as `/data`, `/output` and `/scripts`. 
+`/scripts` directory). Also note that 'generate_all_experiments.R' is in the  with the same git repository as `/data`, `/output` and 
+`/scripts`. 
 
 
 ## Building Docker Images
 
-manual build process
-build automation
+### Manual build with `docker build`
+
+To create the actual image and publish it to a public repository such as DockerHub for sharing, the Dockerfile needs to be build either
+manually through the `docker build` command from command-line/terminal, or through an automated build process that will be discussed later.
+
+To manually build images from Dockerfile (here the image for the main Dockerfile), enter at the terminal:
+
+```
+docker build -t your-dockerHub-repo/image-repo .     # note the single dot
+
+```
+
+where `-t` flag tells Docker that this image belongs to user 'your-dockerHub-repo' and repository 'image-repo'. The '.' at the end of the
+statement means that Docker should look the current working directory for the Dockerfile, and any other files/scripts (for example, if you have a
+script in your working directory that you would import to the image using `ADD` or `COPY`). If you intend to
+publish your image, then I would recommend you create an account with DockerHub, and make a repository for your image. You can then push
+the image that was just built to DockerHub using:
+
+```
+docker psuh your-dockerHub-repo/image-repo
+
+```
+
+### Build automation with DockerHub
+
+DockerHub provides a build automation system, where every push to a public repository that contains the Dockerfile, such as GitHub
+or BitBucket, triggers image building. To create automated build: 
+
+* login to your DockerHub account
+* from your Dashboard, click 'create' then choose 'create automated build'
+* select GitHub or BitBucker (depending on where you have stored the Dockerfile)
+* select the repository that contains the Dockerfile
 
 ## Running Docker Images
 
-Overview here
+To run an image, use `docker run`:
+
+```
+docker run -p 49000:8787 -d your-dockerHub-repo/image-repo
+
+```
+You would then navigate in your web browser to http://0.0.0.0:49000, and this opens up RStudio Server.
+
+The `-p` flag in the run command tells docker that it should connect to port 8787 [^port] when port 49000 is called at the runtime (
+i.e when http://0.0.0.0:49000 is called at the browser). The flag `-d` tells docker that the image is stored in the user account 
+'your-dockerHub-repo' under 'image-repo' repository (this is the way that docker addresses an image on DockerHub).  
+
+[^port]: By default RStudio Server runs on port 8787. see https://support.rstudio.com/hc/en-us/articles/200552306-Getting-Started
+
+So lets recap how the main Dockerfile can initiate an instance of RStudio Server. On running the `docker run` command on the image built
+from the main Dockerfile, the `FROM` instruction imports the base image. The base image:
+
+1. installs ubuntu, R, RStudio Server, Git and other dependencies
+2. clones/downloads the project directory and makes a symbolic link to the home directory of the user
+3. sets up write permissions
+4. copies/adds any scripts from the current working directory to the image
+5. it waits for the 8787 port (default port to connect to RStudio Server) to be entered, because of the `EXPOSE` instruction in the base
+    Dockerfile
+6. Upon entering http://0.0.0.0:49000 in the browser, it opens up RStudio Server.
+
+
+
+ 
+
 
 ## Docker commands cheatsheet 
 
