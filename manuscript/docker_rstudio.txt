@@ -152,6 +152,7 @@ the base image that was discussed in the earlier section.
 ```
 FROM dockerhub-repo/docker-rstudio-base
 MAINTAINER name <surname.name@domain.edu.au>
+
 ```
 
 If project directories (i.e `/scripts`, `/data`, `/output`) are stored on a git repository, we can instruct Docker
@@ -168,6 +169,7 @@ RUN git clone https://username@bitbucket.org/username/sample_project_repo.git
 RUN ln -s /sample_project_repo/output /home/user/output    # change 'user' here to the user account name setup in base image
 RUN ln -s /sample_project_repo/scripts /home/user/scripts
 RUN ln -s /sample_project_repo/data /home/user/data
+
 ```
 Below is an illustration of how we would like project files to appear in the RStudio Server session that Docker 
 is going to launch.
@@ -211,6 +213,7 @@ RUN chmod 700 /home/user/output/results
 RUN (Rscript -e 'install.packages(c("dplyr","XML","ggplot2"), repos="http://cran.rstudio.com/")') # install CRAN packages
 RUN (Rscript -e 'source("http://bioconductor.org/biocLite.R"); biocLite(c("limma"))') # install Bioconductor packages 
  
+ 
 ```
 
 A nice way of running the analysis would be to write a general script called 'generate_all_experiments.R' that would go over
@@ -232,6 +235,7 @@ RUN (Rscript -e 'install.packages(c("dplyr","hexbin","colorRamps","survival","XM
 RUN (Rscript -e 'source("http://bioconductor.org/biocLite.R"); biocLite(c("limma","GSVA", "sva","org.Hs.eg.db"))')  
 WORKDIR /sample_project_repo
 RUN mv generate_all_experiments.R /home/user
+
 
 ```
 Note that all your scripts should be run from within the `/scripts` directory, and all the results should be written to the `/output`
