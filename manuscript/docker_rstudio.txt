@@ -47,12 +47,12 @@ just created in the previous step.
 Docker instructions `ADD` or `COPY` can be used to add or copy a file from your local directory to the Docker container.
 `CMD` will run the program/executable specified by the following command. 
 
-~~~~~~~~
+```
 FROM r-base
 COPY . /usr/local/src/myscripts
 WORKDIR /usr/local/src/myscripts
 CMD ["Rscript", "myscript.R"]
-~~~~~~~~ 
+```
 
 In the above example, the latest version of `base-r` image is imported. `COPY` makes a copy of the contents of the
 current directory to the `/usr/local/src/myscripts` directory on Docker. `WORKDIR` changes the directory to `myscripts`
@@ -86,7 +86,7 @@ The following is a template for the base Dockerfile that we would need to use to
 
 ```
 FROM ubuntu:14.04
-MAINTAINER Soroor Hediyeh Zadeh <hediyehzadeh.s@wehi.edu.au>
+MAINTAINER Name Surname <surname.name@domain.edu.au>
 RUN echo "deb http://cran.ms.unimelb.edu.au/bin/linux/ubuntu trusty/" >> /etc/apt/sources.list   
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9 
 RUN apt-get update
@@ -102,7 +102,6 @@ RUN mkdir -p /var/log/supervisor
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 EXPOSE 8787
 CMD ["/usr/bin/supervisord"]
-
 ```
 Here, the `FROM` instruction in line 1 imports Ubuntu version 14.04 image from ubuntu repository (in DockerHub). This
 installs Ubuntu on our null computing environment.
@@ -128,48 +127,133 @@ to tell the docker to listen for 8787 port on the network to be called at the ru
 R-Studio Server. Once the image is run from the command-line/terminal, Docker would wait for the user to call this port from the browser.
 It would then run the image. In the final line, the executable `supervisor` is run, which is responsible to create a login page.
 
+![login page](images/rstudio-login)
+
 ### The Main Image
 
 #### Organisation of the data
 
-Ideally, data should be organised in a meaningful and structured manner. For example, there should be a `/data` directory that is home
-to all the data used in the experiment. The source codes go under the `/scripts` directory, and the results are stored in the`/output`
-directory. Having data organised this way, locating files
+Ideally, files related to a project should be organised in a meaningful and structured manner. For example, there should be a `/data` directory that is home
+to all the data used in the experiment in the project directory. The source codes go under the `/scripts` directory, and the results are stored in the`/output`
+directory. Having data organised this way, locating files becomes easier and ensures consistency. Since all project-related files are 
+going to be made available through a R-Studio session, I recommend you organise your files as described here, so that your readers would know
+where to look to find codes, datasets and the expected outputs. You would then need to push your project directory to a version control repository
+such as Github, BitBucket or SVN. Below is an illustration of how we would like project files to appear in the R-Studio Server session that Docker 
+is going to launch.
+
+![Data Organisation in Docker-based R-Studio session](images/rstudio-session)
+
+
 
 ### The Dockerfile
 
+Once project files are pushed to a git repository, we can start with writing up our main Dockerfile.
+As discussed earlier, the main Docker image that runs the analysis requires a base image on which all the required
+softwares and their dependencies are installed. The main Dockerfile, therefore, begins with a `FROM` instruction that imports
+the base image that was discussed in the earlier section.
+
 ```
-FROM davislaboratory/docker-rstudio-server
-MAINTAINER soroorh <hediyehzadeh.s@wehi.edu.au>
-RUN git clone https://soroorh@bitbucket.org/soroorh/mforoutan_tgfb_paper_2016.git 
-RUN ln -s /mforoutan_tgfb_paper_2016/output /home/davislab/output
-RUN ln -s /mforoutan_tgfb_paper_2016/scripts /home/davislab/scripts
-RUN ln -s /mforoutan_tgfb_paper_2016/data /home/davislab/data
-RUN chown -R davislab:davislab /home/davislab/output/figures
-RUN chmod 700 /home/davislab/output/figures
-RUN chown -R davislab:davislab /home/davislab/output/results
-RUN chmod 700 /home/davislab/output/results
-RUN chown -R davislab:davislab /home/davislab/data/comparative_analysis/probe_gene_mapping/out_10data_check
-RUN chmod 700 /home/davislab/data/comparative_analysis/probe_gene_mapping/out_10data_check
-RUN git clone https://soroorh@bitbucket.org/soroorh/mforoutan_paper_rdata.git 
-RUN mv /mforoutan_paper_rdata/randRanks_up.RData /home/davislab/data/comparative_analysis/probe_gene_mapping/out_10data_check
-RUN mv /mforoutan_paper_rdata/CI99_up.RData /home/davislab/data/comparative_analysis/probe_gene_mapping/out_10data_check
-RUN mv /mforoutan_paper_rdata/CI99_down.RData /home/davislab/data/comparative_analysis/probe_gene_mapping/out_10data_check
-RUN mv /mforoutan_paper_rdata/down_permute_dens.RData /home/davislab/data/comparative_analysis/probe_gene_mapping/out_10data_check
-RUN mv /mforoutan_paper_rdata/up_permute_dens.RData /home/davislab/data/comparative_analysis/probe_gene_mapping/out_10data_check
-RUN git clone https://soroorh@bitbucket.org/soroorh/mforoutan_paper_rdata_2.git
-RUN mv /mforoutan_paper_rdata_2/randRanks_down.RData /home/davislab/data/comparative_analysis/probe_gene_mapping/out_10data_check
-RUN chown -R davislab:davislab /home/davislab/data/integrative_analysis/out_10data_check
-RUN chmod 700 /home/davislab/data/integrative_analysis/out_10data_check
-RUN mv /mforoutan_paper_rdata_2/Heiser /home/davislab/data/Heiser
-RUN mv /mforoutan_paper_rdata_2/COSMIC /home/davislab/data/COSMIC
-RUN (Rscript -e 'install.packages(c("dplyr","hexbin","colorRamps","survival","XML","ggplot2","matrixStats"), repos="http://cran.rstudio.com/")')
-RUN (Rscript -e 'source("http://bioconductor.org/biocLite.R"); biocLite(c("limma","GSVA", "sva","org.Hs.eg.db"))')  
-WORKDIR /mforoutan_tgfb_paper_2016
-RUN mv generate_all_experiments.R /home/davislab
+FROM dockerhub-repo/docker-rstudio-base
+MAINTAINER name <surname.name@domain.edu.au>
 ```
 
+If project directories (i.e `/scripts`, `/data`, `/output`) are stored on a git repository, we can instruct Docker
+to clone the repository through the `RUN` instruction. This is possible because we have installed git on the base image,
+and we have imported the base image here. To save some memory, we could then make symbolic links from the cloned repository to the home
+directory of the user account that was set in the base image Dockerfile, rather than copying all the cloned files across.
+Please note that the symbolic link is made to the home directory of the user, because by default RStudio session sets the home directory 
+as the working directory. 
+
+```
+FROM dockerhub-repo/docker-rstudio-base
+MAINTAINER name <surname.name@domain.edu.au>
+RUN git clone https://username@bitbucket.org/username/sample_project_repo.git 
+RUN ln -s /sample_project_repo/output /home/user/output    # change 'user' here to the user account name setup in base image
+RUN ln -s /sample_project_repo/scripts /home/user/scripts
+RUN ln -s /sample_project_repo/data /home/user/data
+```
+Below is an illustration of how we would like project files to appear in the R-Studio Server session that Docker 
+is going to launch.
+
+![Data Organisation in Docker-based R-Studio session](images/rstudio-session)
+
+The next step is to enbale write permissions to the `/output` directory, and any other (sub)directory to which you wish
+to write files. This enables saving the main and/or supplementary results, as well as the intermediate data. The `RUN` instruction
+can be used to set `chown` and `chmode` settings. `chown -R ` provides the user 'user' access to all files in the directory recursively (-R)
+, and `chmod 700` gives write access to the 'user'. These setting should be enabled for all directories or sub-directories of interest.
+
+```
+FROM dockerhub-repo/docker-rstudio-base
+MAINTAINER name <surname.name@domain.edu.au>
+RUN git clone https://username@bitbucket.org/username/sample_project_repo.git 
+RUN ln -s /sample_project_repo/output /home/user/output    # change 'user' here to the user account name setup in base image
+RUN ln -s /sample_project_repo/scripts /home/user/scripts
+RUN ln -s /sample_project_repo/data /home/user/data
+RUN chown -R user:user /home/user/output/figures
+RUN chmod 700 /home/user/output/figures
+RUN chown -R user:user /home/user/output/results
+RUN chmod 700 /home/user/output/results
+```
+
+Any data analysis in R might depend on CRAN or Bioconductor packages. Such dependencies can be installed for each
+study on its main Dockerfile through the `RUN` instruction. Followings are examples of package installation from popular R package
+repositories. Note use of `Rscript` executable to run R functions `source` and `install.packages` in command-line.
+
+
+```
+FROM dockerhub-repo/docker-rstudio-base
+MAINTAINER name <surname.name@domain.edu.au>
+RUN git clone https://username@bitbucket.org/username/sample_project_repo.git 
+RUN ln -s /sample_project_repo/output /home/user/output    # change 'user' here to the user account name setup in base image
+RUN ln -s /sample_project_repo/scripts /home/user/scripts
+RUN ln -s /sample_project_repo/data /home/user/data
+RUN chown -R user:user /home/user/output/figures
+RUN chmod 700 /home/user/output/figures
+RUN chown -R user:user /home/user/output/results
+RUN chmod 700 /home/user/output/results
+RUN (Rscript -e 'install.packages(c("dplyr","XML","ggplot2"), repos="http://cran.rstudio.com/")') # install CRAN packages
+RUN (Rscript -e 'source("http://bioconductor.org/biocLite.R"); biocLite(c("limma"))') # install Bioconductor packages  
+```
+
+A nice way of running the analysis would be to write a general script called 'generate_all_experiments.R' that would go over
+all the scripts in the study. This script can be sourced by the reader once the R-Studio session has started, to re-generate
+all the results in the experiment.
+
+```
+FROM dockerhub-repo/docker-rstudio-base
+MAINTAINER name <surname.name@domain.edu.au>
+RUN git clone https://username@bitbucket.org/username/sample_project_repo.git 
+RUN ln -s /sample_project_repo/output /home/user/output    # change 'user' here to the user account name setup in base image
+RUN ln -s /sample_project_repo/scripts /home/user/scripts
+RUN ln -s /sample_project_repo/data /home/user/data
+RUN chown -R user:user /home/user/output/figures
+RUN chmod 700 /home/user/output/figures
+RUN chown -R user:user /home/user/output/results
+RUN chmod 700 /home/user/output/results
+RUN (Rscript -e 'install.packages(c("dplyr","hexbin","colorRamps","survival","XML","ggplot2","matrixStats"), repos="http://cran.rstudio.com/")')
+RUN (Rscript -e 'source("http://bioconductor.org/biocLite.R"); biocLite(c("limma","GSVA", "sva","org.Hs.eg.db"))')  
+WORKDIR /sample_project_repo
+RUN mv generate_all_experiments.R /home/user
+```
+Note that all your scripts should be run from within the `/scripts` directory, and all the results should be written to the `/output`
+directory relative to the `/scripts` directory. Similarly, the path to the data should be relative to the `/scripts` directory
+So, be careful when setting paths in your scripts. In fact, the reason why I change the working directory to the cloned repository is
+that the path in all my scripts is relative to the `/scripts` directory (i.e. it is assumed that the current working directory is the
+`/scripts` directory). Also note that 'generate_all_experiments.R' is in the  with the same git repository as `/data`, `/output` and `/scripts`. 
+
+
+## Building Docker Images
+
+manual build process
+build automation
+
+## Running Docker Images
+
+Overview here
+
 ## Docker commands cheatsheet 
+
+Cheatsheet and troubleshooting 
 
 
 
