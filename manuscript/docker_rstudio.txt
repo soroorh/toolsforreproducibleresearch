@@ -127,7 +127,7 @@ to tell the docker to listen for a port on the network to be called at the runti
 RStudio Server. Once the image is run from the command-line/terminal, Docker would wait for the user to call this port from the browser.
 It would then run the image. In the final line, the executable `supervisor` is run, which is responsible to create a login page.
 
-![login page](images/rstudio-login)
+![login page](images/rstudio-login.png)
 
 ### The Main Image
 
@@ -138,10 +138,7 @@ to all the data used in the experiment in the project directory. The source code
 directory. Having data organised this way, locating files becomes easier and ensures consistency. Since all project-related files are 
 going to be made available through a RStudio session, I recommend you organise your files as described here, so that your readers would know
 where to look to find codes, datasets and the expected outputs. You would then need to push your project directory to a version control repository
-such as Github, BitBucket or SVN. Below is an illustration of how we would like project files to appear in the RStudio Server session that Docker 
-is going to launch.
-
-![Data Organisation in Docker-based RStudio session](images/rstudio-session)
+such as Github, BitBucket or SVN. 
 
 
 
@@ -175,7 +172,7 @@ RUN ln -s /sample_project_repo/data /home/user/data
 Below is an illustration of how we would like project files to appear in the RStudio Server session that Docker 
 is going to launch.
 
-![Data Organisation in Docker-based RStudio session](images/rstudio-session)
+![Data Organisation in Docker-based RStudio session](images/rstudio-session.png)
 
 The next step is to enbale write permissions to the `/output` directory, and any other (sub)directory to which you wish
 to write files. This enables saving the main and/or supplementary results, as well as the intermediate data. The `RUN` instruction
@@ -304,11 +301,6 @@ from the main Dockerfile, the `FROM` instruction imports the base image. The bas
 5. it waits for the 8787 port (default port to connect to RStudio Server) to be entered, because of the `EXPOSE` instruction in the base
     Dockerfile
 6. Upon entering http://0.0.0.0:49000 in the browser, it opens up RStudio Server.
-
-
-
- 
-
 
 ## Docker commands cheatsheet 
 
