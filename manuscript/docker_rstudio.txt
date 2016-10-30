@@ -209,7 +209,8 @@ RUN chmod 700 /home/user/output/figures
 RUN chown -R user:user /home/user/output/results
 RUN chmod 700 /home/user/output/results
 RUN (Rscript -e 'install.packages(c("dplyr","XML","ggplot2"), repos="http://cran.rstudio.com/")') # install CRAN packages
-RUN (Rscript -e 'source("http://bioconductor.org/biocLite.R"); biocLite(c("limma"))') # install Bioconductor packages  
+RUN (Rscript -e 'source("http://bioconductor.org/biocLite.R"); biocLite(c("limma"))') # install Bioconductor packages 
+ 
 ```
 
 A nice way of running the analysis would be to write a general script called 'generate_all_experiments.R' that would go over
@@ -231,6 +232,7 @@ RUN (Rscript -e 'install.packages(c("dplyr","hexbin","colorRamps","survival","XM
 RUN (Rscript -e 'source("http://bioconductor.org/biocLite.R"); biocLite(c("limma","GSVA", "sva","org.Hs.eg.db"))')  
 WORKDIR /sample_project_repo
 RUN mv generate_all_experiments.R /home/user
+
 ```
 Note that all your scripts should be run from within the `/scripts` directory, and all the results should be written to the `/output`
 directory relative to the `/scripts` directory. Similarly, the path to the data should be relative to the `/scripts` directory
